@@ -3,7 +3,6 @@ package com.learning.journalApp.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -30,5 +29,5 @@ public class User {
 
     @DBRef
     private List<JournalEntry> journalEntries = new ArrayList<>();
-
+    private List<String> roles;
 }
