@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      database: journaldb
+      auto-index-creation: true
+
+
+  profiles:
+    active: dev, prod   # This also decides preference, prod on top of dev
