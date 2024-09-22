@@ -5,6 +5,8 @@ import com.learning.journalApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,20 +23,15 @@ public class UserController {
         return userService.getAll();
     }
 
-    @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-        if(userService.saveEntry(user)) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        }
-        return new ResponseEntity<>("Error while saving new user entry. userName must be unique",HttpStatus.BAD_REQUEST);
-    }
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
 
-    @PutMapping("/{userName}")
-    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable String userName) {
         User userInDb = userService.findByUserName(userName);
         if(userInDb != null) {
             userInDb.setUserName(user.getUserName());
-            userInDb.setPassword((user.getPassword()));
+            userInDb.setPassword(user);
             userService.saveEntry(userInDb);
             return new ResponseEntity<>("User updated", HttpStatus.ACCEPTED);
         }

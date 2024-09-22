@@ -8,21 +8,29 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private String[] tempgetRoles (List<String> roles) {
+        if (roles == null) {
+            return new String[]{""};
+        }
+        return roles.toArray(new String[0]);
+    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUserName(username);
         if(user != null) {
-            UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+            return org.springframework.security.core.userdetails.User.builder()
                     .username(user.getUserName())
                     .password(user.getPassword())
-                    .roles(user.getRoles().toArray(new String[0]))
+                    .roles(tempgetRoles(user.getRoles()))
                     .build();
-            return userDetails;
         }
         throw new UsernameNotFoundException("Username not found for this userName: " + username );
     }
