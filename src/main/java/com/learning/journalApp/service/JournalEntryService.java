@@ -40,9 +40,8 @@ public class JournalEntryService {
         return journalEntryRepository.findAll();
     }
 
-    public ResponseEntity<?> findById(ObjectId id) {
-        Optional<JournalEntry> document = journalEntryRepository.findById(id.toString());
-        return document.map((journalEntry) -> new ResponseEntity<>(journalEntry, HttpStatus.OK)).orElseGet(() -> null);
+    public Optional<JournalEntry> findById(ObjectId id) {
+        return journalEntryRepository.findById(id.toString());
     }
 
     public boolean deleteById(ObjectId id, String userName) {
@@ -57,7 +56,7 @@ public class JournalEntryService {
     }
 
     public boolean updateEntry(ObjectId myId, JournalEntry myEntry) {
-        JournalEntry document = (JournalEntry) this.findById(myId).getBody();  // we get structure data in body. Fetching data from body is unnecessary
+        JournalEntry document = this.findById(myId).stream().findFirst().orElse(null);
         boolean isUpdated = false;
         if (document != null) {
             String title = myEntry.getTitle();
