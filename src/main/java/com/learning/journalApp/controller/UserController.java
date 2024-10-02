@@ -23,6 +23,15 @@ public class UserController {
         return userService.getAll();
     }
 
+    @GetMapping("/login")
+    public ResponseEntity<?> login(){
+        // This will be reached here, only if login is valid, through spring security + UserDetailsServiceImpl
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return new ResponseEntity<>("Welcome " + authentication.getName(), HttpStatus.ACCEPTED);
+    }
+
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody User user) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

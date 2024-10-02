@@ -16,6 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    // Below has to be removed, once we add roles to users
     private String[] tempgetRoles (List<String> roles) {
         if (roles == null) {
             return new String[]{""};
